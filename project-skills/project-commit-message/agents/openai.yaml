@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Commit Message"
+  short_description: "Analyze changes and draft commit commands"
+  default_prompt: "Use $project-commit-message to analyze this repository and prepare conventional commit commands."
