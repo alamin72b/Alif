@@ -77,6 +77,11 @@ the typed task-branch command; never end a task-start response on `dev`.
 Make commands copy-safe: quote paths, keep every physical command line at 72
 characters or fewer, and never split a path, option, quoted string, or shell
 operator across lines.
+When a task-branch → `dev` pull request is ready, also provide an
+industry-standard PR title and complete Markdown description. Use a
+Conventional Commit-style title matching the dominant change. The description
+must include `## Summary` and `## Testing`, describe only verified changes, and
+never invent test results, risks, issue references, or breaking changes.
 
 ### First-time setup with a clean worktree
 
@@ -157,13 +162,43 @@ After verifying that the intended commits exist and the branch is not `dev` or
 
 ```bash
 git push -u origin feat/short-task-name
-gh pr create --base dev --head feat/short-task-name
+gh pr create \
+  --base dev \
+  --head feat/short-task-name \
+  --title 'feat: concise pull request title' \
+  --body "$(printf '%s\n' \
+    '## Summary' \
+    '' \
+    '- Describe the verified repository outcome.' \
+    '- Mention the main implementation areas changed.' \
+    '' \
+    '## Testing' \
+    '' \
+    '- State the checks actually run, or explain why they were not run.')"
 ```
 
-Suggest a PR title from the task and a factual summary of visible commits and
-changes. If GitHub CLI is unavailable or unauthenticated, provide the Git push
-command and state that the user should open a PR on GitHub from the task branch
-to `dev`; do not fabricate a URL.
+Also provide the proposed PR title and complete description separately from
+the command. The `gh pr create` command must include the title and complete
+description so it can create the PR without prompting for either field. Use
+this structure:
+
+```markdown
+## Summary
+
+- Describe the user-visible or repository-level outcome.
+- Mention the main implementation areas changed.
+
+## Testing
+
+- State the checks actually run, or say `Not run` with the reason.
+```
+
+Keep the title concise and specific, such as
+`feat: add task execution endpoint`. Summarize visible changes without
+restating every file. Add `## Risks` or `## Follow-up` only when relevant.
+If GitHub CLI is unavailable or unauthenticated, provide the Git push command
+and state that the user should open a PR on GitHub from the task branch to
+`dev`; do not fabricate a URL.
 
 ### Prepare a development release PR
 
