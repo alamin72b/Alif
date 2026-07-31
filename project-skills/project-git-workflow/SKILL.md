@@ -162,11 +162,25 @@ After verifying that the intended commits exist and the branch is not `dev` or
 
 ```bash
 git push -u origin feat/short-task-name
-gh pr create --base dev --head feat/short-task-name
+gh pr create \
+  --base dev \
+  --head feat/short-task-name \
+  --title 'feat: concise pull request title' \
+  --body "$(printf '%s\n' \
+    '## Summary' \
+    '' \
+    '- Describe the verified repository outcome.' \
+    '- Mention the main implementation areas changed.' \
+    '' \
+    '## Testing' \
+    '' \
+    '- State the checks actually run, or explain why they were not run.')"
 ```
 
 Also provide the proposed PR title and complete description separately from
-the command. Use this structure:
+the command. The `gh pr create` command must include the title and complete
+description so it can create the PR without prompting for either field. Use
+this structure:
 
 ```markdown
 ## Summary
