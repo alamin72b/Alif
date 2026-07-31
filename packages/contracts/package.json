@@ -1,0 +1,19 @@
+{
+  "name": "@alif/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "lint": "tsc --noEmit",
+    "test": "echo 'No contract tests yet'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

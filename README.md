@@ -259,29 +259,31 @@ Human confirmation will be required before actions such as:
 
 Security decisions will be enforced by local deterministic code rather than by the AI model alone.
 
-## Planned Repository Structure
+## Repository Structure
 
 ```text
 Alif/
 ├── apps/
-│   ├── web/              # Next.js interface
-│   ├── api/              # NestJS API
-│   └── agent-worker/     # Agent workflow worker
+│   ├── web/                  # Next.js application
+│   ├── api/                  # NestJS application
+│   └── agent-worker/         # Background worker
 │
 ├── packages/
-│   ├── agent-core/       # Graph state and nodes
-│   ├── browser/          # Playwright automation
-│   ├── contracts/        # Shared schemas and types
-│   ├── database/         # Database access
-│   ├── llm-gateway/      # AI provider routing
-│   ├── memory/           # Memory retrieval
-│   ├── security/         # Action policies
-│   ├── observability/    # Logging and tracing
-│   └── config/           # Environment validation
+│   ├── contracts/            # Shared Zod schemas and types
+│   ├── config/               # Environment validation
+│   └── observability/        # Shared logging
 │
-├── infrastructure/       # Docker configuration
-├── docs/                 # Detailed technical documents
-├── tests/                # Integration and end-to-end tests
+├── docs/
+│   ├── development/         # Setup and contributor guidance
+│   └── architecture/        # System docs and decision records
+│
+├── infrastructure/          # Reserved for local services
+├── package.json
+├── pnpm-workspace.yaml
+├── turbo.json
+├── tsconfig.base.json
+├── .env.example
+├── .gitignore
 └── README.md
 ```
 
@@ -380,10 +382,18 @@ Local application code is responsible for validation, authorization, execution, 
 
 ## Documentation
 
-Detailed technical documentation will be stored separately:
+Detailed technical documentation is stored separately:
 
 ```text
 docs/
+├── development/
+│   ├── getting-started.md
+│   ├── local-environment.md
+│   └── project-structure.md
+├── architecture/
+│   └── decisions/
+│       ├── README.md
+│       └── 0001-use-typescript-monorepo.md
 ├── architecture.md
 ├── provider-routing.md
 ├── browser-automation.md

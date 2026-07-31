@@ -1,0 +1,19 @@
+{
+  "name": "@alif/observability",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "lint": "tsc --noEmit",
+    "test": "echo 'No observability tests yet'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "pino": "^9.7.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
