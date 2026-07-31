@@ -61,8 +61,18 @@ Return, in this order:
 
 1. A short repository summary: branch/upstream state, unpushed commits already present, and uncommitted groups found.
 2. One section per proposed commit containing its type/scope, a fenced complete message, and a ready-to-run command.
-3. Make every command copy-safe: keep each physical command line at 72 characters or fewer, never split a path, quoted string, option, or shell operator across lines, and use only explicit line breaks. Prefer a short sequence of commands over one long command.
-4. When related files share a directory, first change into that directory so
+3. Treat the fenced complete message as the canonical source of truth. The
+   commit command must reproduce its subject and every body paragraph exactly,
+   including wording, punctuation, paragraph order, and all substantive detail.
+   Never shorten, paraphrase, or replace the recommended body with a summary.
+4. Represent each commit-message paragraph with its own `-m` argument, in the
+   same order as the fenced message. If the message has no body, use only the
+   subject `-m` argument.
+5. Make every command copy-safe: keep each physical command line at 72
+   characters or fewer, never split a path, quoted string, option, or shell
+   operator across lines, and use only explicit line breaks. Prefer a short
+   sequence of commands over one long command.
+6. When related files share a directory, first change into that directory so
    staging uses short relative paths. For unstaged groups, use this form:
 
 ```bash
@@ -73,7 +83,7 @@ git commit -m 'type(scope): concise subject' \
 cd -
 ```
 
-5. For already staged groups, omit `git add`; warn when the staged index also contains unrelated changes.
-6. A concise note identifying anything intentionally left unstaged or requiring `git add -p`.
+7. For already staged groups, omit `git add`; warn when the staged index also contains unrelated changes.
+8. A concise note identifying anything intentionally left unstaged or requiring `git add -p`.
 
 Quote shell paths safely. Never use `git add -A`, `git commit -a`, `git commit --amend`, `git reset`, or `git push` in a recommended command unless the user explicitly requests that operation.
