@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Git Workflow"
+  short_description: "Guide safe branches, sync, and pull requests"
+  default_prompt: "Use $project-git-workflow to recommend the next safe branch and GitHub pull-request commands for this repository."
