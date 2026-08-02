@@ -1,9 +1,42 @@
-import { Controller, Get } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
+import {
+  createTaskSchema,
+  type CreateTaskInput,
+  type Task,
+} from '@alif/contracts';
 
-@Controller()
-export class AppController {
-  @Get("health")
-  health() {
-    return { service: "alif-api", status: "ok" };
+import { ZodValidationPipe } from './common/pipes/zod-validation.pipe';
+import { TasksService } from './tasks/tasks.service';
+
+@Controller('tasks')
+export class TasksController {
+  constructor(private readonly tasksService: TasksService) {}
+
+  @Post()
+  create(
+    @Body(new ZodValidationPipe(createTaskSchema))
+    input: CreateTaskInput,
+  ): Task {
+    return this.tasksService.create(input);
+  }
+
+  @Get()
+  findAll(): Task[] {
+    return this.tasksService.findAll();
+  }
+
+  @Get(':id')
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' }))
+    id: string,
+  ): Task {
+    return this.tasksService.findOne(id);
   }
 }
