@@ -11,8 +11,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@alif/config": "workspace:*",
     "@alif/contracts": "workspace:*",
+    "@alif/database": "workspace:*",
     "@nestjs/common": "^11.1.5",
+    "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.1.5",
     "@nestjs/platform-express": "^11.1.5",
     "class-transformer": "^0.5.1",

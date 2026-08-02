@@ -12,3 +12,5 @@ coverage/
 .DS_Store
 .idea/
 .vscode/
+# Prisma generated client
+packages/database/src/generated/

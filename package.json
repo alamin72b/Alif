@@ -8,7 +8,15 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "infra:up": "docker compose --env-file .env.example -f infrastructure/compose.yaml up -d",
+    "infra:down": "docker compose --env-file .env.example -f infrastructure/compose.yaml down",
+    "infra:status": "docker compose --env-file .env.example -f infrastructure/compose.yaml ps",
+    "infra:logs": "docker compose --env-file .env.example -f infrastructure/compose.yaml logs -f postgres",
+    "db:generate": "pnpm --filter @alif/database db:generate",
+    "db:migrate": "pnpm --filter @alif/database db:migrate",
+    "db:deploy": "pnpm --filter @alif/database db:deploy",
+    "db:studio": "pnpm --filter @alif/database db:studio"
   },
   "devDependencies": {
     "turbo": "^2.5.6",

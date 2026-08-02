@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export * from './database-environment.schema';
+
 export const environmentSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   PORT: z.coerce.number().int().positive().default(3001),
