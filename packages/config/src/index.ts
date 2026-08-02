@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 export * from './database-environment.schema';
+export * from './redis-environment.schema';
+export * from './runtime-environment.schema';
 
 export const environmentSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
