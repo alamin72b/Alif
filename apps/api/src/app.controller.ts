@@ -23,12 +23,12 @@ export class TasksController {
   create(
     @Body(new ZodValidationPipe(createTaskSchema))
     input: CreateTaskInput,
-  ): Task {
+  ): Promise<Task> {
     return this.tasksService.create(input);
   }
 
   @Get()
-  findAll(): Task[] {
+  findAll(): Promise<Task[]> {
     return this.tasksService.findAll();
   }
 
@@ -36,7 +36,7 @@ export class TasksController {
   findOne(
     @Param('id', new ParseUUIDPipe({ version: '4' }))
     id: string,
-  ): Task {
+  ): Promise<Task> {
     return this.tasksService.findOne(id);
   }
 }

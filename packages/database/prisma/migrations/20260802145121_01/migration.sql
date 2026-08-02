@@ -1,0 +1,13 @@
+-- CreateEnum
+CREATE TYPE "TaskStatus" AS ENUM ('PENDING', 'QUEUED', 'RUNNING', 'WAITING_FOR_CONFIRMATION', 'COMPLETED', 'FAILED', 'CANCELLED');
+
+-- CreateTable
+CREATE TABLE "tasks" (
+    "id" UUID NOT NULL,
+    "command" VARCHAR(4000) NOT NULL,
+    "status" "TaskStatus" NOT NULL DEFAULT 'PENDING',
+    "created_at" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(3) NOT NULL,
+
+    CONSTRAINT "tasks_pkey" PRIMARY KEY ("id")
+);

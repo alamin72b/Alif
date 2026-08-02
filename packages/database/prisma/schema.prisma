@@ -1,0 +1,29 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TaskStatus {
+  PENDING
+  QUEUED
+  RUNNING
+  WAITING_FOR_CONFIRMATION
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model Task {
+  id        String     @id @default(uuid()) @db.Uuid
+  command   String     @db.VarChar(4000)
+  status    TaskStatus @default(PENDING)
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("tasks")
+}
