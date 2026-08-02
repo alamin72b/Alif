@@ -47,7 +47,7 @@ git log --oneline @{u}..HEAD
 
 Inspect changed files and project manifests or documentation when they establish the task's intent. Check `gh auth status` and `gh repo view` only when proposing GitHub CLI commands.
 
-Report the current branch, worktree state, upstream state, whether `origin/dev` exists, and the next workflow stage. Treat an unavailable upstream or missing `gh` authentication as a blocker for the relevant command, not as permission to guess.
+Report the current branch, worktree state, upstream state, whether `origin/dev` exists, and the next workflow stage. Treat an unavailable upstream or missing `gh` authentication as a blocker for execution only, not as a reason to omit the relevant copy-ready command. Never guess repository state, branch names, or PR metadata.
 
 ## Choose the Task Branch
 
@@ -82,6 +82,17 @@ industry-standard PR title and complete Markdown description. Use a
 Conventional Commit-style title matching the dominant change. The description
 must include `## Summary` and `## Testing`, describe only verified changes, and
 never invent test results, risks, issue references, or breaking changes.
+
+### Command output requirement
+
+Always return the complete, copy-ready commands for the requested workflow;
+never execute them. This requirement applies even when GitHub CLI, network
+access, authentication, or the runtime environment prevents command
+execution. For a requested pull request, include the full `git push` command
+and a complete `gh pr create` command with explicit `--base`, `--head`,
+`--title`, and `--body` arguments. If execution is blocked, state the blocker
+after providing the commands and include the equivalent manual GitHub action
+when applicable.
 
 ### First-time setup with a clean worktree
 
@@ -196,9 +207,9 @@ this structure:
 Keep the title concise and specific, such as
 `feat: add task execution endpoint`. Summarize visible changes without
 restating every file. Add `## Risks` or `## Follow-up` only when relevant.
-If GitHub CLI is unavailable or unauthenticated, provide the Git push command
-and state that the user should open a PR on GitHub from the task branch to
-`dev`; do not fabricate a URL.
+If GitHub CLI is unavailable or unauthenticated, still provide the complete
+`gh pr create` command, then state that the user should run it locally or open
+a PR on GitHub from the task branch to `dev`; do not fabricate a URL.
 
 ### Prepare a development release PR
 
