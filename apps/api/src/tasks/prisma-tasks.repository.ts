@@ -10,9 +10,7 @@ import { mapDatabaseTask } from './task.mapper';
 import { TasksRepository } from './tasks.repository';
 
 @Injectable()
-export class PrismaTasksRepository
-  implements TasksRepository
-{
+export class PrismaTasksRepository implements TasksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(input: CreateTaskInput): Promise<Task> {
@@ -50,22 +48,34 @@ export class PrismaTasksRepository
     fromStatuses: readonly TaskStatus[],
     toStatus: TaskStatus,
   ): Promise<Task | null> {
-    const result = await this.prisma.client.task.updateMany({
-      where: {
-        id,
-        status: {
-          in: [...fromStatuses],
-        },
-      },
-      data: {
-        status: toStatus,
-      },
-    });
-
-    if (result.count === 0) {
+    if (fromStatuses.length === 0) {
       return null;
     }
 
-    return this.findOne(id);
+    return this.prisma.client.$transaction(async (transaction) => {
+      const updateResult = await transaction.task.updateMany({
+        where: {
+          id,
+          status: {
+            in: [...fromStatuses],
+          },
+        },
+        data: {
+          status: toStatus,
+        },
+      });
+
+      if (updateResult.count !== 1) {
+        return null;
+      }
+
+      const task = await transaction.task.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      return task ? mapDatabaseTask(task) : null;
+    });
   }
 }
