@@ -3,11 +3,13 @@ import { randomUUID } from 'node:crypto';
 import { NotFoundException } from '@nestjs/common';
 import type { Task } from '@alif/contracts';
 
+import { TaskQueuePublisher } from '../queue/task-queue.publisher';
 import { TasksRepository } from './tasks.repository';
 import { TasksService } from './tasks.service';
 
 describe('TasksService', () => {
   let repository: jest.Mocked<TasksRepository>;
+  let taskQueuePublisher: jest.Mocked<TaskQueuePublisher>;
   let service: TasksService;
 
   const task: Task = {
@@ -23,23 +25,37 @@ describe('TasksService', () => {
       create: jest.fn(),
       findAll: jest.fn(),
       findOne: jest.fn(),
+      transitionStatus: jest.fn(),
     };
 
-    service = new TasksService(repository);
+    taskQueuePublisher = {
+      enqueue: jest.fn(),
+    } as unknown as jest.Mocked<TaskQueuePublisher>;
+
+    service = new TasksService(repository, taskQueuePublisher);
   });
 
   it('creates a task through the repository', async () => {
     repository.create.mockResolvedValue(task);
+    taskQueuePublisher.enqueue.mockResolvedValue(task.id);
+    repository.transitionStatus.mockResolvedValue({
+      ...task,
+      status: 'QUEUED',
+    });
 
     await expect(
       service.create({
         command: task.command,
       }),
-    ).resolves.toEqual(task);
+    ).resolves.toEqual({
+      ...task,
+      status: 'QUEUED',
+    });
 
     expect(repository.create).toHaveBeenCalledWith({
       command: task.command,
     });
+    expect(taskQueuePublisher.enqueue).toHaveBeenCalledWith(task.id);
   });
 
   it('returns tasks from the repository', async () => {

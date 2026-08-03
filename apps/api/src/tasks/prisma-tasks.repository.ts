@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   type CreateTaskInput,
   type Task,
+  type TaskStatus,
 } from '@alif/contracts';
 
 import { PrismaService } from '../database/prisma.service';
@@ -42,5 +43,29 @@ export class PrismaTasksRepository
     });
 
     return task ? mapDatabaseTask(task) : null;
+  }
+
+  async transitionStatus(
+    id: string,
+    fromStatuses: readonly TaskStatus[],
+    toStatus: TaskStatus,
+  ): Promise<Task | null> {
+    const result = await this.prisma.client.task.updateMany({
+      where: {
+        id,
+        status: {
+          in: [...fromStatuses],
+        },
+      },
+      data: {
+        status: toStatus,
+      },
+    });
+
+    if (result.count === 0) {
+      return null;
+    }
+
+    return this.findOne(id);
   }
 }

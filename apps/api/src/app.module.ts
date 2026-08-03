@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { validateDatabaseEnvironment } from '@alif/config';
+import { validateRuntimeEnvironment } from '@alif/config';
 
 import { TasksController } from './app.controller';
+import { QueueInfrastructureModule } from './queue/queue-infrastructure.module';
 import { TasksModule } from './tasks/tasks.module';
 
 @Module({
@@ -10,8 +11,9 @@ import { TasksModule } from './tasks/tasks.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '../../.env'],
-      validate: validateDatabaseEnvironment,
+      validate: validateRuntimeEnvironment,
     }),
+    QueueInfrastructureModule,
     TasksModule,
   ],
   controllers: [TasksController],
